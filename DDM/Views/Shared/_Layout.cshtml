@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>钻井数据监控平台</title>
+    <link href="~/favicon1.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+   
+    
+</head>
+<body>
+     @RenderSection("featured", required: false)
+    <section>
+       
+     @RenderBody()
+     </section>
+    
+    <div class="clearfix"></div>
+    <footer>
+       @* <div class="container-fluid">
+            <p class="copyright">Copyright &copy; 2017.Company name All rights reserved.</p>
+        </div>*@
+    </footer>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

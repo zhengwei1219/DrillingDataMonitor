@@ -1,0 +1,63 @@
+﻿@{
+    
+    ViewBag.Title = "井列表";
+}
+<script type="text/javascript">
+    function FillWell(wellno)
+    {
+        window.parent.RedirectToDataMonitor(wellno);
+    }
+</script>
+    <section>
+        <div class="container-fluid">
+					<!-- OVERVIEW -->
+					<div class="panel panel-headline">
+						@*<div class="panel-heading">
+							<h3 class="panel-title">正钻井列表</h3>
+							
+						</div>*@
+						<div class="panel-body no-padding">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>井号</th>
+												<th>设计深度</th>
+												<th>当前深度</th>
+												<th>开钻时间</th>
+												<th>钻井状态</th>
+											</tr>
+										</thead>
+										<tbody>
+                                            @{
+                                                foreach (string[] item in ViewBag.WellList)
+                                                {
+                                                  <tr>
+                                                      <td>
+                                                          <a href="#" onclick="FillWell('@item[0]')">
+                                                          @item[0]
+                                                          </a>
+                                                      </td>
+                                                      <td>
+                                                          @item[1]
+                                                      </td>
+                                                      <td>
+                                                          @item[2]
+                                                      </td>
+                                                      <td>
+                                                          @item[3]
+                                                      </td>
+                                                      <td>
+                                                          @item[4]
+                                                      </td>
+                                                  </tr> 
+                                                }
+                                             }
+										</tbody>
+									</table>
+								</div>
+					</div>
+					<!-- END OVERVIEW -->
+					
+					
+				</div>
+    </section>

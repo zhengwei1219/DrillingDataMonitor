@@ -1,0 +1,168 @@
+﻿@{
+    ViewBag.Title = "主页";
+}
+
+    <script src="~/assets/scripts/klorofil-common.js" ></script>
+    <script type="text/javascript">
+        function RedirectTo(url)
+        {
+            $("#mainPage").attr("src", '@Url.Action("loading")');
+            setTimeout(function () {
+                $("#mainPage").attr("src", url);
+            }, 500);
+        }
+        
+        function RedirectToDataMonitor(wellno)
+        {
+
+            $("#mainPage").attr("src", '@Url.Action("loading")');
+            if (!wellno)
+                wellno = $("#Well_NO").val();
+            else
+                $("#Well_NO").val(wellno);
+            if (wellno == "") {
+                alert("请输入井号");
+                return;
+            }
+            var url = '@Url.Action("Curve","DataMonitor")' + "?wellno=" + wellno;
+            //要访问数据监控页面先要激活数据服务进程
+            var iframe = document.createElement("iframe");
+            iframe.border = 0;
+            iframe.src = "http://192.168.1.123/gds/index.aspx"; 
+            if (iframe.attachEvent) {
+                iframe.attachEvent("onload",
+                    function ()
+                    {
+                        $("#mainPage").attr("src", url);
+                        document.body.removeChild(iframe);
+                    });
+            } else {
+                iframe.onload = function ()
+                {
+                    $("#mainPage").attr("src", url);
+                    document.body.removeChild(iframe);
+                };
+            }
+                
+                document.body.appendChild(iframe); 
+            //RedirectTo(url);
+        }
+        function changeFrameHeight() {
+            var ifm = document.getElementById("mainPage");
+            ifm.height = document.documentElement.clientHeight - 142;
+        }
+
+        window.onresize = function () {
+            changeFrameHeight();
+
+        }
+    </script>
+    <section>
+        <div id="wrapper">
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="brand">
+                <a href="index.html">
+                    <img src="~/assets/img/logo-dark.png" alt="Klorofil Logo" class="img-responsive logo"></a>
+            </div>
+            <div class="container-fluid">
+                <div class="navbar-btn">
+                    <button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
+                </div>
+                <form class="navbar-form navbar-left">
+                    <div class="input-group">
+                        <input type="text" value="DG1-1-1S" id="Well_NO" class="form-control" placeholder="选择井...">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary" onclick="RedirectToDataMonitor()">Go</button></span>
+                    </div>
+                </form>
+               @* <div class="navbar-btn navbar-btn-right">
+                    <a class="btn btn-success update-pro" href="#downloads/klorofil-pro-bootstrap-admin-dashboard-template/?utm_source=klorofil&utm_medium=template&utm_campaign=KlorofilPro" title="Upgrade to Pro" target="_blank"><i class="fa fa-rocket"></i><span>UPGRADE TO PRO</span></a>
+                </div>*@
+                <div id="navbar-menu">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+                                <i class="lnr lnr-alarm"></i>
+                                <span class="badge bg-danger">1</span>
+                            </a>
+                            <ul class="dropdown-menu notifications">
+                                <li><a href="#" class="notification-item"><span class="dot bg-warning"></span>A message for you!</a></li>
+                              
+                                <li><a href="#" class="more">See all notifications</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="lnr lnr-question-circle"></i><span>帮助</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">用户手册</a></li>
+                                <li><a href="#">控件下载</a></li>
+                                <li><a href="#">技术支持</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                               <span class="lnr lnr-smile"></span>
+                                <span>管理员</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#"><i class="lnr lnr-user"></i><span>个人信息</span></a></li>
+                                <li><a href="#"><i class="lnr lnr-cog"></i><span>设置</span></a></li>
+                                <li><a href="#"><i class="lnr lnr-exit"></i><span>注销登录</span></a></li>
+                            </ul>
+                        </li>
+                        <!-- <li>
+							    <a class="update-pro" href="#downloads/klorofil-pro-bootstrap-admin-dashboard-template/?utm_source=klorofil&utm_medium=template&utm_campaign=KlorofilPro" title="Upgrade to Pro" target="_blank"><i class="fa fa-rocket"></i> <span>UPGRADE TO PRO</span></a>
+						    </li> -->
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- END NAVBAR -->
+        <!-- LEFT SIDEBAR -->
+        <div id="sidebar-nav" class="sidebar">
+            <div class="sidebar-scroll">
+                <nav>
+                    <ul class="nav">
+                        <li><a href="#" onclick="RedirectTo('@Url.Action("WellList","Home")')" class="active"><i class="lnr lnr-home"></i><span>正钻井列表</span></a></li>
+                       @* <li><a href="#" onclick="RedirectToDataMonitor()"><i class="lnr lnr-screen"></i><span>随钻监控</span></a></li>*@
+                         <li><a href="#" onclick="RedirectTo('@Url.Action("Curve","DataMonitor")')"><i class="lnr lnr-screen"></i><span>随钻监控</span></a></li>
+                        <li><a href="#" class=""><i class="lnr lnr-chart-bars"></i><span>仪表盘显示</span></a></li>
+                        <li><a href="#" class=""><i class="lnr lnr-pie-chart"></i><span>查询统计</span></a></li>
+                        <li>
+                            <a href="#DataMag"  data-toggle="collapse" class="collapsed"><i class="lnr lnr-database"></i><span>数据管理</span><i class="icon-submenu lnr lnr-chevron-left"></i></a>
+                             <div id="DataMag" class="collapse">
+                                <ul class="nav">
+                                    <li><a href="#" onclick="RedirectTo('@Url.Action("SaveWell","DataManager")')" >井基础数据</a></li>
+                                    
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#subPages" data-toggle="collapse" class="collapsed"><i class="lnr lnr-cog"></i><span>系统管理</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+                            <div id="subPages" class="collapse ">
+                                <ul class="nav">
+                                    <li><a href="#" class="">用户管理</a></li>
+                                    <li><a href="#" class="">系统日志</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                       
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <!-- END LEFT SIDEBAR -->
+        <!-- MAIN -->
+        <div class="main">
+            <div class="main-content">
+                <div class="container-fluid">
+               <iframe id="mainPage" src="@Url.Action("WellList","Home")" onload="changeFrameHeight()" style="width: 100%;   border: 0px;" frameborder="no"  scrolling="auto" />
+               <iframe id="wtsPage" src="#" style="display:none;" />
+                </div>
+            </div>
+        </div>
+            
+        <!-- END MAIN -->
+    </div>
+        
+    </section>
