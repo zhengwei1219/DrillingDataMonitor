@@ -171,98 +171,320 @@
             x3: canwidth, y3: canheight,
             x4: 0, y4: canheight,
             closed: true
-        })
-            .drawRect({
-                strokeStyle: '#000',
-                strokeWidth: 2,
-                layer: true,
-                draggable: true,
-                x: 100, y: 100,
-                width: 150,
-                height: 150,
-                fromCenter: false,
-                groups: ['curve1'],
-                dragGroups: ['curve1'],
-                restrictDragToAxis: 'x'
-            })
-            .mousedown(function(e){
-                if(e.which == 3){  // 1 = 鼠标左键; 2 = 鼠标中键; 3 = 鼠标右键
-                    contextmenufun(e);
+        });
+        function headerRect(text, width) {
+            this.text=text;
+            this.width=width
+        };
+        var arr = new Array();
+        arr.push(new headerRect("钻压/钻速/垂深", 150));
+        arr.push(new headerRect("深\n度", 50));
+        arr.push(new headerRect("电阻率", 150));
+        arr.push(new headerRect("循环当量/\n泥浆入口密度", 150));
+        arr.push(new headerRect("伽马/\n大钩高度", 150));
+        arr.push(new headerRect("孔隙度/\n密度", 150));
+        arr.push(new headerRect("录井气测", 150));
+        arr.push(new headerRect("岩性剖面", 150));
+        arr.push(new headerRect("荧\n光\n级\n别", 50));
+        arr.push(new headerRect("岩性描述", 150));
+        var rectX = 0;
+        for (var i = 0; i < arr.length; i++) {
+           
+            
+            if (i != 0) {
+                rectX += arr[i - 1].width;
+            } else {
+                rectX = 100;
             }
-            })
-            //.drawLine({
-            //strokeStyle: '#000',
-            //strokeWidth: 2,
-            //x1: 100, y1: 50,
-            //x2: 250, y2: 50,
-            //x3: 250, y3: 200,
-            //x4: 100, y4: 200,
-            //closed: true
-            //})
-            .drawText({
-            fillStyle: 'blue',
-            x: 175, y: 175,
-            fontSize: 18,
-            text: '钻压/钻速/垂深',
-            fontFamily: '宋体',
-            groups: ['curve1'],
-            dragGroups: ['curve1'],
-            restrictDragToAxis: 'x'
-            }).drawLine({
-                layer: true,
-            strokeStyle: '#000',
-            strokeWidth: 1,
-            x1: 100, y1: 220.5,
-            x2: 250, y2: 220.5,
-            groups: ['curve1'],
-            dragGroups: ['curve1'],
-            restrictDragToAxis: 'x'
-            }).drawRect({
+            var textX = rectX + arr[i].width / 2;
+            var curve = "curve" + i;
+            $('#can_header').drawRect({
                 strokeStyle: '#000',
                 strokeWidth: 2,
                 layer: true,
                 draggable: true,
-                x: 250, y: 100,
-                width: 50,
-                height: 150,
+                x: rectX, y: 100,
+                width: arr[i].width,
+                height: 200,
                 fromCenter: false,
-                groups: ['curve2'],
-                dragGroups: ['curve2'],
+                groups: [curve],
+                dragGroups: [curve],
                 restrictDragToAxis: 'x'
             }).drawText({
-                layer: true,
                 fillStyle: 'blue',
-            x: 275, y: 175,
-            fontSize: 18,
-            text: '深\n度',
-            fontFamily: '宋体',
-            groups: ['curve2'],
-            dragGroups: ['curve2'],
-            restrictDragToAxis: 'x',
-            maxWidth: 20
-            }).drawRect({
-                strokeStyle: '#000',
-                strokeWidth: 2,
-                layer: true,
-                draggable: true,
-                x: 300, y: 100,
-                width: 150,
-                height: 150,
-                fromCenter: false,
-                groups: ['curve3'],
-                dragGroups: ['curve3'],
+                x: textX, y: 175,
+                fontSize: 18,
+                text: arr[i].text,
+                fontFamily: '宋体',
+                groups: [curve],
+                dragGroups: [curve],
                 restrictDragToAxis: 'x'
-            }).drawText({
-                layer: true,
-            fillStyle: 'blue',
-            x: 380, y: 175,
-            fontSize: 18,
-            text: '电阻率',
-            fontFamily: '宋体',
-            groups: ['curve3'],
-            dragGroups: ['curve3'],
-            restrictDragToAxis: 'x'
-            });
+            }).mousedown(function(e){
+                        if(e.which == 3){  // 1 = 鼠标左键; 2 = 鼠标中键; 3 = 鼠标右键
+                           contextmenufun(e);
+                   }
+                   });
+        }
+     
+        //$('#can_header').drawRect({
+        //        strokeStyle: '#000',
+        //        strokeWidth: 2,
+        //        layer: true,
+        //        draggable: true,
+        //        x: 100, y: 100,
+        //        width: 150,
+        //        height: 150,
+        //        fromCenter: false,
+        //        groups: ['curve1'],
+        //        dragGroups: ['curve1'],
+        //        restrictDragToAxis: 'x'
+        //    })
+        //    .mousedown(function(e){
+        //        if(e.which == 3){  // 1 = 鼠标左键; 2 = 鼠标中键; 3 = 鼠标右键
+        //            contextmenufun(e);
+        //    }
+        //    })
+        //    //.drawLine({
+        //    //strokeStyle: '#000',
+        //    //strokeWidth: 2,
+        //    //x1: 100, y1: 50,
+        //    //x2: 250, y2: 50,
+        //    //x3: 250, y3: 200,
+        //    //x4: 100, y4: 200,
+        //    //closed: true
+        //    //})
+        //    .drawText({
+        //    fillStyle: 'blue',
+        //    x: 175, y: 175,
+        //    fontSize: 18,
+        //    text: '钻压/钻速/垂深',
+        //    fontFamily: '宋体',
+        //    groups: ['curve1'],
+        //    dragGroups: ['curve1'],
+        //    restrictDragToAxis: 'x'
+        //    }).drawLine({
+        //        layer: true,
+        //    strokeStyle: '#000',
+        //    strokeWidth: 1,
+        //    x1: 100, y1: 220.5,
+        //    x2: 250, y2: 220.5,
+        //    groups: ['curve1'],
+        //    dragGroups: ['curve1'],
+        //    restrictDragToAxis: 'x'
+        //    }).drawRect({
+        //        strokeStyle: '#000',
+        //        strokeWidth: 2,
+        //        layer: true,
+        //        draggable: true,
+        //        x: 250, y: 100,
+        //        width: 50,
+        //        height: 150,
+        //        fromCenter: false,
+        //        groups: ['curve2'],
+        //        dragGroups: ['curve2'],
+        //        restrictDragToAxis: 'x'
+        //    }).drawText({
+        //        layer: true,
+        //        fillStyle: 'blue',
+        //    x: 275, y: 175,
+        //    fontSize: 18,
+        //    text: '深\n度',
+        //    fontFamily: '宋体',
+        //    groups: ['curve2'],
+        //    dragGroups: ['curve2'],
+        //    restrictDragToAxis: 'x',
+        //    maxWidth: 20
+        //    }).drawRect({
+        //        strokeStyle: '#000',
+        //        strokeWidth: 2,
+        //        layer: true,
+        //        draggable: true,
+        //        x: 300, y: 100,
+        //        width: 150,
+        //        height: 150,
+        //        fromCenter: false,
+        //        groups: ['curve3'],
+        //        dragGroups: ['curve3'],
+        //        restrictDragToAxis: 'x'
+        //    }).drawText({
+        //        layer: true,
+        //    fillStyle: 'blue',
+        //    x: 380, y: 175,
+        //    fontSize: 18,
+        //    text: '电阻率',
+        //    fontFamily: '宋体',
+        //    groups: ['curve3'],
+        //    dragGroups: ['curve3'],
+        //    restrictDragToAxis: 'x'
+        //    }).drawRect({
+        //        strokeStyle: '#000',
+        //        strokeWidth: 2,
+        //        layer: true,
+        //        draggable: true,
+        //        x: 450, y: 100,
+        //        width: 150,
+        //        height: 150,
+        //        fromCenter: false,
+        //        groups: ['curve4'],
+        //        dragGroups: ['curve4'],
+        //        restrictDragToAxis: 'x'
+        //    }).drawText({
+        //        layer: true,
+        //        fillStyle: 'blue',
+        //        x: 520, y: 175,
+        //        fontSize: 18,
+                
+        //        text: '循环当量/\n泥浆入口密度',
+        //        fontFamily: '宋体',
+        //        groups: ['curve4'],
+        //        dragGroups: ['curve4'],
+        //        restrictDragToAxis: 'x',
+        //        maxWidth:300,
+        //    }).drawRect({
+        //        strokeStyle: '#000',
+        //        strokeWidth: 2,
+        //        layer: true,
+        //        draggable: true,
+        //        x: 600, y: 100,
+        //        width: 150,
+        //        height: 150,
+        //        fromCenter: false,
+        //        groups: ['curve5'],
+        //        dragGroups: ['curve5'],
+        //        restrictDragToAxis: 'x'
+        //    }).drawText({
+        //        layer: true,
+        //        fillStyle: 'blue',
+        //        x: 680, y: 175,
+        //        fontSize: 18,
+
+        //        text: '伽马/\n大钩高度',
+        //        fontFamily: '宋体',
+        //        groups: ['curve5'],
+        //        dragGroups: ['curve5'],
+        //        restrictDragToAxis: 'x',
+        //        maxWidth: 300,
+        //    }).drawRect({
+        //        strokeStyle: '#000',
+        //        strokeWidth: 2,
+        //        layer: true,
+        //        draggable: true,
+        //        x: 750, y: 100,
+        //        width: 150,
+        //        height: 150,
+        //        fromCenter: false,
+        //        groups: ['curve6'],
+        //        dragGroups: ['curve6'],
+        //        restrictDragToAxis: 'x'
+        //    }).drawText({
+        //        layer: true,
+        //        fillStyle: 'blue',
+        //        x: 830, y: 175,
+        //        fontSize: 18,
+
+        //        text: '孔隙度/\n密度',
+        //        fontFamily: '宋体',
+        //        groups: ['curve6'],
+        //        dragGroups: ['curve6'],
+        //        restrictDragToAxis: 'x',
+        //        maxWidth: 300,
+        //    }).drawRect({
+        //        strokeStyle: '#000',
+        //        strokeWidth: 2,
+        //        layer: true,
+        //        draggable: true,
+        //        x: 900, y: 100,
+        //        width: 150,
+        //        height: 150,
+        //        fromCenter: false,
+        //        groups: ['curve7'],
+        //        dragGroups: ['curve7'],
+        //        restrictDragToAxis: 'x'
+        //    }).drawText({
+        //        layer: true,
+        //        fillStyle: 'blue',
+        //        x: 980, y: 175,
+        //        fontSize: 18,
+
+        //        text: '录井气测',
+        //        fontFamily: '宋体',
+        //        groups: ['curve7'],
+        //        dragGroups: ['curve7'],
+        //        restrictDragToAxis: 'x',
+        //        maxWidth: 300,
+        //    }).drawRect({
+        //        strokeStyle: '#000',
+        //        strokeWidth: 2,
+        //        layer: true,
+        //        draggable: true,
+        //        x: 1050, y: 100,
+        //        width: 100,
+        //        height: 150,
+        //        fromCenter: false,
+        //        groups: ['curve8'],
+        //        dragGroups: ['curve8'],
+        //        restrictDragToAxis: 'x'
+        //    }).drawText({
+        //        layer: true,
+        //        fillStyle: 'blue',
+        //        x: 1100, y: 175,
+        //        fontSize: 18,
+
+        //        text: '岩性剖面',
+        //        fontFamily: '宋体',
+        //        groups: ['curve9'],
+        //        dragGroups: ['curve9'],
+        //        restrictDragToAxis: 'x',
+        //        maxWidth: 300,
+        //    }).drawRect({
+        //        strokeStyle: '#000',
+        //        strokeWidth: 2,
+        //        layer: true,
+        //        draggable: true,
+        //        x: 1150, y: 100,
+        //        width: 50,
+        //        height: 150,
+        //        fromCenter: false,
+        //        groups: ['curve10'],
+        //        dragGroups: ['curve10'],
+        //        restrictDragToAxis: 'x'
+        //    }).drawText({
+        //        layer: true,
+        //        fillStyle: 'blue',
+        //        x: 1175, y: 175,
+        //        fontSize: 18,
+
+        //        text: '荧\n光\n级\n别',
+        //        fontFamily: '宋体',
+        //        groups: ['curve10'],
+        //        dragGroups: ['curve10'],
+        //        restrictDragToAxis: 'x',
+        //        maxWidth: 300,
+        //    }).drawRect({
+        //        strokeStyle: '#000',
+        //        strokeWidth: 2,
+        //        layer: true,
+        //        draggable: true,
+        //        x: 1200, y: 100,
+        //        width: 150,
+        //        height: 150,
+        //        fromCenter: false,
+        //        groups: ['curve11'],
+        //        dragGroups: ['curve11'],
+        //        restrictDragToAxis: 'x'
+        //    }).drawText({
+        //        layer: true,
+        //        fillStyle: 'blue',
+        //        x: 1280, y: 175,
+        //        fontSize: 18,
+
+        //        text: '岩性描述',
+        //        fontFamily: '宋体',
+        //        groups: ['curve11'],
+        //        dragGroups: ['curve11'],
+        //        restrictDragToAxis: 'x',
+        //        maxWidth: 300,
+        //    });
         $('#can_datas').attr("width", canwidth);
         $('#can_datas').attr("height", 450);
         
