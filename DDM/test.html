@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link href="Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+    <link href="Content/themes/base/jquery.ui.dialog.css" rel="stylesheet" />
+    <script src="Scripts/jquery-1.7.1.min.js"></script>
+    <script src="Scripts/jquery-ui-1.8.20.js"></script>
+</head>
+<script type="text/javascript">
+    function changeDepth() {
+        $("#depth").css("display", "block");
+        $("#depth").dialog(
+            {
+                title: '调整深度参数',
+                height: 330,
+                width: 550,
+                modal: true,
+                buttons: [{
+                    text: "确定",
+                    click: function () {
+                        alert(111);
+                    }
+                }, {
+                    text: "取消",
+                    click: function () {
+                        $j(this).dialog("close");
+                    }
+                }
+
+
+                ]
+            });
+    }
+</script>
+<body>
+    <input type="button" id="save" onclick="changeDepth();" value="深度" />
+    <div id="depth" style="display:none">
+        <label>设计深度</label>
+    </div>
+</body>
+</html>

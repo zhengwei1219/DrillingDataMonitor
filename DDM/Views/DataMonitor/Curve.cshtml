@@ -1,7 +1,15 @@
 ﻿@{
     ViewBag.Title = "Curve";
 }
+<link href="@Url.Content("~/Content/themes/base/jquery-ui.css")" rel="stylesheet" />
+<link href="@Url.Content("~/Content/themes/base/jquery.ui.dialog.css")" rel="stylesheet" />
+<script src="@Url.Content("~/ViewsScripts/globalCurve.js")"></script>
+<script src="@Url.Content("~/ViewsScripts/DataMonitor/HLBDCurve.js")?=3"></script>
+<script src="@Url.Content("~/ViewsScripts/DataMonitor/SNBXCurve.js")?=3"></script>
+<script src="@Url.Content("~/Scripts/jquery-1.7.1.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.js")"></script>
 <script src="@Url.Content("~/Scripts/jcanvas.min.js")?v=8"></script>
+
 <style type="text/css">
     ul {
         list-style-type: none;
@@ -51,575 +59,91 @@
                 display: none;
                 position: absolute;
             }
-			
-			
+
+
 </style>
 <script type="text/javascript">
-    var getOffset = {
-        top: function (obj) {
-            return obj.offsetTop + (obj.offsetParent ? arguments.callee(obj.offsetParent) : 0)
-        },
-        left: function (obj) {
-            return obj.offsetLeft + (obj.offsetParent ? arguments.callee(obj.offsetParent) : 0)
-        }
-    };
-    var Controlobj;
-    //$(function () {
-    //    $("#dv_curve").height(($(document).height()-10 ) + "px");
-    //});
-    document.oncontextmenu = function (e) {
-        return false;
-    }
-    $(document).click(function () {
-        $(".contextmenu").hide();
-    });
-    function contextmenufun(e) {
-        var oMenu = document.getElementById("contextmenu");
-        var aUl = oMenu.getElementsByTagName("ul");
-        var aLi = oMenu.getElementsByTagName("li");
-        var showTimer = hideTimer = null;
-        var i = 0;
-        var maxWidth = maxHeight = 0;
-        var aDoc = [document.documentElement.offsetWidth, document.documentElement.offsetHeight];
-        oMenu.style.display = "none";
-        for (i = 0; i < aLi.length; i++) {
-            //为含有子菜单的li加上箭头
-            aLi[i].getElementsByTagName("ul")[0] && (aLi[i].className = "sub");
-            //鼠标移入
-            aLi[i].onmouseover = function () {
-                var oThis = this;
-                var oUl = oThis.getElementsByTagName("ul");
-                //鼠标移入样式
-                oThis.className += " active";
-                //显示子菜单
-                if (oUl[0]) {
-                    clearTimeout(hideTimer);
-                    showTimer = setTimeout(function () {
-                        for (i = 0; i < oThis.parentNode.children.length; i++) {
-                            oThis.parentNode.children[i].getElementsByTagName("ul")[0] &&
-                            (oThis.parentNode.children[i].getElementsByTagName("ul")[0].style.display = "none");
-                        }
-                        oUl[0].style.display = "block";
-                        oUl[0].style.top = oThis.offsetTop + "px";
-                        oUl[0].style.left = oThis.offsetWidth + "px";
-                        setWidth(oUl[0]);
-                        //最大显示范围
-                        maxWidth = aDoc[0] - oUl[0].offsetWidth;
-                        maxHeight = aDoc[1] - oUl[0].offsetHeight;
-                        //防止溢出
-                        maxWidth < getOffset.left(oUl[0]) && (oUl[0].style.left = -oUl[0].clientWidth + "px");
-                        maxHeight < getOffset.top(oUl[0]) && (oUl[0].style.top = -oUl[0].clientHeight + oThis.offsetTop + oThis.clientHeight + "px")
-                    }, 300);
-                }
-            };
-            //鼠标移出
-            aLi[i].onmouseout = function () {
-                var oThis = this;
-                var oUl = oThis.getElementsByTagName("ul");
-                //鼠标移出样式
-                oThis.className = oThis.className.replace(/\s?active/, "");
-                clearTimeout(showTimer);
-                hideTimer = setTimeout(function () {
-                    for (i = 0; i < oThis.parentNode.children.length; i++) {
-                        oThis.parentNode.children[i].getElementsByTagName("ul")[0] &&
-                        (oThis.parentNode.children[i].getElementsByTagName("ul")[0].style.display = "none");
-                    }
-                }, 300);
-            };
-        }
-        oMenu.style.display = "block";
-        oMenu.style.top = event.clientY + "px";
-        oMenu.style.left = event.clientX + "px";
-        setWidth(aUl[0]);
-        //最大显示范围
-        maxWidth = aDoc[0] - oMenu.offsetWidth;
-        maxHeight = aDoc[1] - oMenu.offsetHeight;
-        //防止菜单溢出
-        oMenu.offsetTop > maxHeight && (oMenu.style.top = maxHeight + "px");
-        oMenu.offsetLeft > maxWidth && (oMenu.style.left = maxWidth + "px");
-        return false;
-    }
-    window.onload = function () {
-       
-
-        //点击隐藏菜单
-        document.onclick = function () {
-        var oMenu = document.getElementById("contextmenu");
-            oMenu.style.display = "none"
-        };
-        //取li中最大的宽度, 并赋给同级所有li
-        function setWidth(obj) {
-            maxWidth = 0;
-            for (i = 0; i < obj.children.length; i++) {
-                var oLi = obj.children[i];
-                var iWidth = oLi.clientWidth - parseInt(oLi.currentStyle ? oLi.currentStyle["paddingLeft"] : getComputedStyle(oLi, null)["paddingLeft"]) * 2
-                if (iWidth > maxWidth) maxWidth = iWidth;
-            }
-            for (i = 0; i < obj.children.length; i++) obj.children[i].style.width = maxWidth + "px";
-        }
-
-
-        var canwidth=$(document).width()-20;
-        var canheight=250;
-        $('#can_header').attr("width", canwidth);
-        $('#can_header').attr("height", canheight);
-        $('#can_header').drawLine({
-            fillStyle: '#ffffff',
-            layer: true,
-            x1: 0, y1: 0,
-            x2: canwidth, y2: 0,
-            x3: canwidth, y3: canheight,
-            x4: 0, y4: canheight,
-            closed: true
-        });
-        function headerRect(text, width) {
-            this.text=text;
-            this.width=width
-        };
-        var arr = new Array();
-        arr.push(new headerRect("钻压/钻速/垂深", 150));
-        arr.push(new headerRect("深\n度", 50));
-        arr.push(new headerRect("电阻率", 150));
-        arr.push(new headerRect("循环当量/\n泥浆入口密度", 150));
-        arr.push(new headerRect("伽马/\n大钩高度", 150));
-        arr.push(new headerRect("孔隙度/\n密度", 150));
-        arr.push(new headerRect("录井气测", 150));
-        arr.push(new headerRect("岩性剖面", 150));
-        arr.push(new headerRect("荧\n光\n级\n别", 50));
-        arr.push(new headerRect("岩性描述", 150));
-        var rectX = 0;
-        for (var i = 0; i < arr.length; i++) {
-           
-            
-            if (i != 0) {
-                rectX += arr[i - 1].width;
-            } else {
-                rectX = 100;
-            }
-            var textX = rectX + arr[i].width / 2;
-            var curve = "curve" + i;
-            $('#can_header').drawRect({
-                strokeStyle: '#000',
-                strokeWidth: 2,
-                layer: true,
-                draggable: true,
-                x: rectX, y: 100,
-                width: arr[i].width,
-                height: 200,
-                fromCenter: false,
-                groups: [curve],
-                dragGroups: [curve],
-                restrictDragToAxis: 'x'
-            }).drawText({
-                fillStyle: 'blue',
-                x: textX, y: 175,
-                fontSize: 18,
-                text: arr[i].text,
-                fontFamily: '宋体',
-                groups: [curve],
-                dragGroups: [curve],
-                restrictDragToAxis: 'x'
-            }).mousedown(function(e){
-                        if(e.which == 3){  // 1 = 鼠标左键; 2 = 鼠标中键; 3 = 鼠标右键
-                           contextmenufun(e);
-                   }
-                   });
-        }
-     
-        //$('#can_header').drawRect({
-        //        strokeStyle: '#000',
-        //        strokeWidth: 2,
-        //        layer: true,
-        //        draggable: true,
-        //        x: 100, y: 100,
-        //        width: 150,
-        //        height: 150,
-        //        fromCenter: false,
-        //        groups: ['curve1'],
-        //        dragGroups: ['curve1'],
-        //        restrictDragToAxis: 'x'
-        //    })
-        //    .mousedown(function(e){
-        //        if(e.which == 3){  // 1 = 鼠标左键; 2 = 鼠标中键; 3 = 鼠标右键
-        //            contextmenufun(e);
-        //    }
-        //    })
-        //    //.drawLine({
-        //    //strokeStyle: '#000',
-        //    //strokeWidth: 2,
-        //    //x1: 100, y1: 50,
-        //    //x2: 250, y2: 50,
-        //    //x3: 250, y3: 200,
-        //    //x4: 100, y4: 200,
-        //    //closed: true
-        //    //})
-        //    .drawText({
-        //    fillStyle: 'blue',
-        //    x: 175, y: 175,
-        //    fontSize: 18,
-        //    text: '钻压/钻速/垂深',
-        //    fontFamily: '宋体',
-        //    groups: ['curve1'],
-        //    dragGroups: ['curve1'],
-        //    restrictDragToAxis: 'x'
-        //    }).drawLine({
-        //        layer: true,
-        //    strokeStyle: '#000',
-        //    strokeWidth: 1,
-        //    x1: 100, y1: 220.5,
-        //    x2: 250, y2: 220.5,
-        //    groups: ['curve1'],
-        //    dragGroups: ['curve1'],
-        //    restrictDragToAxis: 'x'
-        //    }).drawRect({
-        //        strokeStyle: '#000',
-        //        strokeWidth: 2,
-        //        layer: true,
-        //        draggable: true,
-        //        x: 250, y: 100,
-        //        width: 50,
-        //        height: 150,
-        //        fromCenter: false,
-        //        groups: ['curve2'],
-        //        dragGroups: ['curve2'],
-        //        restrictDragToAxis: 'x'
-        //    }).drawText({
-        //        layer: true,
-        //        fillStyle: 'blue',
-        //    x: 275, y: 175,
-        //    fontSize: 18,
-        //    text: '深\n度',
-        //    fontFamily: '宋体',
-        //    groups: ['curve2'],
-        //    dragGroups: ['curve2'],
-        //    restrictDragToAxis: 'x',
-        //    maxWidth: 20
-        //    }).drawRect({
-        //        strokeStyle: '#000',
-        //        strokeWidth: 2,
-        //        layer: true,
-        //        draggable: true,
-        //        x: 300, y: 100,
-        //        width: 150,
-        //        height: 150,
-        //        fromCenter: false,
-        //        groups: ['curve3'],
-        //        dragGroups: ['curve3'],
-        //        restrictDragToAxis: 'x'
-        //    }).drawText({
-        //        layer: true,
-        //    fillStyle: 'blue',
-        //    x: 380, y: 175,
-        //    fontSize: 18,
-        //    text: '电阻率',
-        //    fontFamily: '宋体',
-        //    groups: ['curve3'],
-        //    dragGroups: ['curve3'],
-        //    restrictDragToAxis: 'x'
-        //    }).drawRect({
-        //        strokeStyle: '#000',
-        //        strokeWidth: 2,
-        //        layer: true,
-        //        draggable: true,
-        //        x: 450, y: 100,
-        //        width: 150,
-        //        height: 150,
-        //        fromCenter: false,
-        //        groups: ['curve4'],
-        //        dragGroups: ['curve4'],
-        //        restrictDragToAxis: 'x'
-        //    }).drawText({
-        //        layer: true,
-        //        fillStyle: 'blue',
-        //        x: 520, y: 175,
-        //        fontSize: 18,
-                
-        //        text: '循环当量/\n泥浆入口密度',
-        //        fontFamily: '宋体',
-        //        groups: ['curve4'],
-        //        dragGroups: ['curve4'],
-        //        restrictDragToAxis: 'x',
-        //        maxWidth:300,
-        //    }).drawRect({
-        //        strokeStyle: '#000',
-        //        strokeWidth: 2,
-        //        layer: true,
-        //        draggable: true,
-        //        x: 600, y: 100,
-        //        width: 150,
-        //        height: 150,
-        //        fromCenter: false,
-        //        groups: ['curve5'],
-        //        dragGroups: ['curve5'],
-        //        restrictDragToAxis: 'x'
-        //    }).drawText({
-        //        layer: true,
-        //        fillStyle: 'blue',
-        //        x: 680, y: 175,
-        //        fontSize: 18,
-
-        //        text: '伽马/\n大钩高度',
-        //        fontFamily: '宋体',
-        //        groups: ['curve5'],
-        //        dragGroups: ['curve5'],
-        //        restrictDragToAxis: 'x',
-        //        maxWidth: 300,
-        //    }).drawRect({
-        //        strokeStyle: '#000',
-        //        strokeWidth: 2,
-        //        layer: true,
-        //        draggable: true,
-        //        x: 750, y: 100,
-        //        width: 150,
-        //        height: 150,
-        //        fromCenter: false,
-        //        groups: ['curve6'],
-        //        dragGroups: ['curve6'],
-        //        restrictDragToAxis: 'x'
-        //    }).drawText({
-        //        layer: true,
-        //        fillStyle: 'blue',
-        //        x: 830, y: 175,
-        //        fontSize: 18,
-
-        //        text: '孔隙度/\n密度',
-        //        fontFamily: '宋体',
-        //        groups: ['curve6'],
-        //        dragGroups: ['curve6'],
-        //        restrictDragToAxis: 'x',
-        //        maxWidth: 300,
-        //    }).drawRect({
-        //        strokeStyle: '#000',
-        //        strokeWidth: 2,
-        //        layer: true,
-        //        draggable: true,
-        //        x: 900, y: 100,
-        //        width: 150,
-        //        height: 150,
-        //        fromCenter: false,
-        //        groups: ['curve7'],
-        //        dragGroups: ['curve7'],
-        //        restrictDragToAxis: 'x'
-        //    }).drawText({
-        //        layer: true,
-        //        fillStyle: 'blue',
-        //        x: 980, y: 175,
-        //        fontSize: 18,
-
-        //        text: '录井气测',
-        //        fontFamily: '宋体',
-        //        groups: ['curve7'],
-        //        dragGroups: ['curve7'],
-        //        restrictDragToAxis: 'x',
-        //        maxWidth: 300,
-        //    }).drawRect({
-        //        strokeStyle: '#000',
-        //        strokeWidth: 2,
-        //        layer: true,
-        //        draggable: true,
-        //        x: 1050, y: 100,
-        //        width: 100,
-        //        height: 150,
-        //        fromCenter: false,
-        //        groups: ['curve8'],
-        //        dragGroups: ['curve8'],
-        //        restrictDragToAxis: 'x'
-        //    }).drawText({
-        //        layer: true,
-        //        fillStyle: 'blue',
-        //        x: 1100, y: 175,
-        //        fontSize: 18,
-
-        //        text: '岩性剖面',
-        //        fontFamily: '宋体',
-        //        groups: ['curve9'],
-        //        dragGroups: ['curve9'],
-        //        restrictDragToAxis: 'x',
-        //        maxWidth: 300,
-        //    }).drawRect({
-        //        strokeStyle: '#000',
-        //        strokeWidth: 2,
-        //        layer: true,
-        //        draggable: true,
-        //        x: 1150, y: 100,
-        //        width: 50,
-        //        height: 150,
-        //        fromCenter: false,
-        //        groups: ['curve10'],
-        //        dragGroups: ['curve10'],
-        //        restrictDragToAxis: 'x'
-        //    }).drawText({
-        //        layer: true,
-        //        fillStyle: 'blue',
-        //        x: 1175, y: 175,
-        //        fontSize: 18,
-
-        //        text: '荧\n光\n级\n别',
-        //        fontFamily: '宋体',
-        //        groups: ['curve10'],
-        //        dragGroups: ['curve10'],
-        //        restrictDragToAxis: 'x',
-        //        maxWidth: 300,
-        //    }).drawRect({
-        //        strokeStyle: '#000',
-        //        strokeWidth: 2,
-        //        layer: true,
-        //        draggable: true,
-        //        x: 1200, y: 100,
-        //        width: 150,
-        //        height: 150,
-        //        fromCenter: false,
-        //        groups: ['curve11'],
-        //        dragGroups: ['curve11'],
-        //        restrictDragToAxis: 'x'
-        //    }).drawText({
-        //        layer: true,
-        //        fillStyle: 'blue',
-        //        x: 1280, y: 175,
-        //        fontSize: 18,
-
-        //        text: '岩性描述',
-        //        fontFamily: '宋体',
-        //        groups: ['curve11'],
-        //        dragGroups: ['curve11'],
-        //        restrictDragToAxis: 'x',
-        //        maxWidth: 300,
-        //    });
-        $('#can_datas').attr("width", canwidth);
-        $('#can_datas').attr("height", 450);
+    $(function () {
         
-        $('#can_datas').drawRect({
-            fillStyle: '#ffffff',
-            layer: true,
-            x: 0, y: 0,
-            width: canwidth,
-            height: 450,
-            fromCenter: false
-        })
-            .drawRect({
-            strokeStyle: '#000',
-            strokeWidth: 2,
-            layer: true,
-            name: 'curve_area_1',
-            draggable: false,
-            x: 100, y: 0,
-            width: 150,
-            height: 400,
-            fromCenter: false,
-            mousemove: function (layer) {
-                //让area_line直线跟随鼠标
-                $(this).animateLayer('area_line', {
-                    opacity:1,
-                    x: layer.x, y: layer.eventY
-                },0)
-            }
-        }).drawRect({
-            strokeStyle: '#000',
-            strokeWidth: 2,
-            layer: true,
-            draggable: false,
-            name: 'curve_area_2',
-            x: 250, y: 0,
-            width: 50,
-            height: 400,
-            fromCenter: false
-        }).drawRect({
-            strokeStyle: '#000',
-            strokeWidth: 2,
-            layer: true,
-            draggable: false,
-            name: 'curve_area_3',
-            x: 300, y: 0,
-            width: 150,
-            height: 400,
-            fromCenter: false
-        });
+        new CurveContext().buildRect();
 
-        drawYLines($('#can_datas'), $('#can_datas').getLayer('curve_area_1'));
-        drawXLines($('#can_datas'), $('#can_datas').getLayer('curve_area_1'));
-        drawDepths($('#can_datas'), $('#can_datas').getLayer('curve_area_2'));
-        drawYLines($('#can_datas'), $('#can_datas').getLayer('curve_area_3'));
-        drawXLines($('#can_datas'), $('#can_datas').getLayer('curve_area_3'));
-        drawAreaLine($('#can_datas'), $('#can_datas').getLayer('curve_area_1'));
-    };
-    //画坐标系(自然数)
-    function drawYLines(canvas,layer)
-    {
-        var oneitemwidth = layer.width / 10;
-        //将宽高平均分成10等份，画9条线
-        for (var i = 1; i < 10; i++) {
-            //纵轴
-            canvas.drawLine({
-                strokeStyle: '#cccccc',
-                strokeWidth: 1,
-                layer:true,
-                x1: layer.x + (oneitemwidth * i) + 0.5, y1: layer.y + 1,
-                x2: layer.x + (oneitemwidth * i)+0.5, y2: layer.y + layer.height-1,
-            });
-        }
-    }
-    function drawXLines(canvas, layer) {
-        var oneitemheight = layer.height / 5;
-        //将宽高平均分成10等份，画5条线
-        for (var i = 1; i < 5; i++) {
-            //纵轴
-            canvas.drawLine({
-                strokeStyle: '#cccccc',
-                strokeWidth: 1,
-                layer: true,
-                x1: layer.x + 1, y1: layer.y + (oneitemheight * i) + 0.5,
-                x2: layer.x + layer.width - 1, y2: layer.y + (oneitemheight * i) + 0.5,
-            });
-        }
-    }
-    function drawDepths(canvas, layer) {
-        var oneitemheight = layer.height / 5;
-        //将宽高平均分成10等份，画5条线
-        for (var i = 1; i < 5; i++) {
-            //纵轴
-            canvas.drawLine({
-                strokeStyle: 'black',
-                strokeWidth: 1,
-                layer: true,
-                x1: layer.x + 1, y1: layer.y + (oneitemheight * i) + 0.5,
-                x2: layer.x + 5, y2: layer.y + (oneitemheight * i) + 0.5,
-            }).drawLine({
-                strokeStyle: 'black',
-                strokeWidth: 1,
-                layer: true,
-                x1: layer.x + layer.width - 6, y1: layer.y + (oneitemheight * i) + 0.5,
-                x2: layer.x + layer.width - 1, y2: layer.y + (oneitemheight * i) + 0.5,
-            }).drawText({
-                fillStyle: 'black',
-                layer: true,
-                x: layer.x + 25, y: layer.y + (oneitemheight * i),
-                fontSize: 12,
-                text: i * 1000,
-                fontFamily: '宋体'
-            });
 
-        }
-    }
-    function drawAreaLine(canvas,layer)
+    });
+    
+    function save()
     {
-        canvas.drawLine({
-            strokeStyle: 'red',
-            strokeWidth: 1,
-            opacity:0,
-            layer: true,
-            name: 'area_line',
-            x1: 0, y1: 0.5,
-            x2: 350, y2: 0.5
-        })
+
+    }
+    function resetTemplate() {
+    //    var c = document.getElementById("can_header");
+    //    var cxt = c.getContext("2d");
+    //    cxt.clearRect(0, 0, c.width, c.height);
+    //var d = document.getElementById("can_datas");
+    //var dxt = d.getContext("2d");
+    //dxt.clearRect(0, 0, d.width, d.height);
+
+        $('#can_header').clearCanvas();
+        $('#can_datas').clearCanvas();
+        new CurveContext().buildRect();
+
+    }
+    function changeDepth() {
+
+        //if(window.location!=window.parent.location){// 页面在iframe中
+        //    window.parent.jQuery.noConflict();
+        //}else{// 页面单独打开
+        //    jQuery.noConflict();
+        //}
+
+       //$doc("#depth").css("display", "block");
+       $("#depth").dialog(
+            {
+                title: '调整深度参数',
+                height: 330,
+                width: 550,
+                modal: true,
+                buttons: [{
+                    text: "确定",
+                    click: function () {
+                        alert(111);
+                    }
+                }, {
+                    text: "取消",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }
+
+
+                ]
+            });
     }
     </script>
 @*<script type="text/javascript" src="@Url.Content("~/Scripts/DataMonitor_Canvas.js")?v=8"></script>*@
-<div  style="width:100%;overflow:auto;height:250px;">
+
+<div style="width:100%;overflow:auto;height:30px;">
+    <label>选择模版：</label>
+    <select id="companyName" onchange="resetTemplate()">
+        <option value="哈里波顿">哈里波顿</option>
+        <option value="斯伦贝谢">斯伦贝谢</option>
+    </select>
+    <input type="button" id="save" onclick="changeDepth();" value="深度" />
+    <label>比例尺：</label>
+    <select id="rate" onchange="resetTemplate()">
+        <option value="50">1:50</option>
+        <option value="200">1:200</option>
+        <option value="500">1:500</option>
+        <option value="1000">1:1000</option>
+    </select>
+    <input type="button" id="save" onclick="save();" value="保存" />
+</div>
+<div  style="width:100%;overflow:auto;height:400px;">
+
 <canvas id="can_header">
 
     </canvas>
     </div>
-<div  style="width:100%;overflow:auto;height:450px;">
+<div  style="width:100%;overflow:auto;height:700px;">
 <canvas id="can_datas">
 
     </canvas>
@@ -642,6 +166,9 @@
             </ul>
         </li>
     </ul>
+</div>
+<div id="depth" style="display:none">
+    <label>设计深度</label>
 </div>
 
 
