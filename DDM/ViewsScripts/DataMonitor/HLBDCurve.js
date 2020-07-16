@@ -136,6 +136,7 @@ HLBDCurveObj.prototype = {
             case "荧\n光\n级\n别":
                 break;
             case "电阻率":
+
                 var one = [
                                    [50, 0],
                                    [62, 170],

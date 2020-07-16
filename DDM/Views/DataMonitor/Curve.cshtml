@@ -66,64 +66,24 @@
 <script type="text/javascript">
     $(function () {
         
-        // new CurveContext().buildRect();
-        var s1 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 189</uidSource><curveNames><string>BPOS</string><string>DMEA</string><string>MDOA</string>></curveNames><lastIndex>2035.58</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
+        new CurveContext().buildRect();
+     
+            //$.ajax({
+            //    url: 'http://demo.oildigital.com:8080/gds/witsmlservice.asmx/GetLogData',
+            //    type: 'POST',
+            //    dataType: 'xml',
+            //    data: soapMessage[i],
+            //    crossDomain: true,
+            //    complete: function (xmlHttpRequest, status) {
+                 
+            //        var json = getJson(xmlHttpRequest.responseText, "GetLogDataResponse");
 
-        var s2 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 2</uidSource><curveNames><string>DMEA</string><string>TQA</string>></curveNames><lastIndex>2035.50</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-        var s3 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 13</uidSource><curveNames><string>G_C1</string><string>G_C2</string><string>G_C3</string><string>G_IC4</string><string>G_IC5</string><string>G_NC4</string><string>G_NC5</string><string>md</string>></curveNames><lastIndex>2032.26</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-        var s4 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 189</uidSource><curveNames><string>BPOS</string><string>DMEA</string><string>MDOA</string>></curveNames><lastIndex>2035.58</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-        var s5 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 2</uidSource><curveNames><string>DMEA</string><string>TQA</string>></curveNames><lastIndex>2035.50</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-        var s6 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 13</uidSource><curveNames><string>G_C1</string><string>G_C2</string><string>G_C3</string><string>G_IC4</string><string>G_IC5</string><string>G_NC4</string><string>G_NC5</string><string>md</string>></curveNames><lastIndex>2032.26</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
+            //        Module.soap_callback(callId, JSON.stringify(json), xmlHttpRequest.status);
+            //    },
+            //    contentType: 'text/xml; charset="utf-8"; action="http://www.oildigital.com/GetLogData"'
 
-        var s7 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 189</uidSource><curveNames><string>BPOS</string><string>DMEA</string><string>MDOA</string>></curveNames><lastIndex>2035.58</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-        var s8 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 13</uidSource><curveNames><string>G_C1</string><string>G_C2</string><string>G_C3</string><string>G_IC4</string><string>G_IC5</string><string>G_NC4</string><string>G_NC5</string><string>md</string>></curveNames><lastIndex>2032.26</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-        var s9 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 2</uidSource><curveNames><string>DMEA</string><string>TQA</string>></curveNames><lastIndex>2035.50</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-        var s10 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 189</uidSource><curveNames><string>BPOS</string><string>DMEA</string><string>MDOA</string>></curveNames><lastIndex>2035.58</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-
-        var s11 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 2</uidSource><curveNames><string>DMEA</string><string>TQA</string>></curveNames><lastIndex>2035.50</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-        var s12 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 13</uidSource><curveNames><string>G_C1</string><string>G_C2</string><string>G_C3</string><string>G_IC4</string><string>G_IC5</string><string>G_NC4</string><string>G_NC5</string><string>md</string>></curveNames><lastIndex>2032.26</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-        var s13 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 2</uidSource><curveNames><string>DMEA</string><string>TQA</string>></curveNames><lastIndex>2035.50</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-        var s14 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 13</uidSource><curveNames><string>G_C1</string><string>G_C2</string><string>G_C3</string><string>G_IC4</string><string>G_IC5</string><string>G_NC4</string><string>G_NC5</string><string>md</string>></curveNames><lastIndex>2032.26</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-        var s15 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 2</uidSource><curveNames><string>DMEA</string><string>TQA</string>></curveNames><lastIndex>1936</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-        var s16 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 13</uidSource><curveNames><string>G_C1</string><string>G_C2</string><string>G_C3</string><string>G_IC4</string><string>G_IC5</string><string>G_NC4</string><string>G_NC5</string><string>md</string>></curveNames><lastIndex>1936</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-        var s17 = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"><soap:Header/><soap:Body><GetLogData xmlns="http://www.oildigital.com/"><uidWell>Dohar-2</uidWell><uidWellbore>Dohar-2</uidWellbore><uidSource>%Rec 189</uidSource><curveNames><string>BPOS</string><string>DMEA</string><string>MDOA</string>></curveNames><lastIndex>1936</lastIndex><maxCount>-1</maxCount><startIndex></startIndex><endIndex></endIndex></GetLogData></soap:Body></soap:Envelope>';
-        var soapMessage = new Array();
-        soapMessage.push(s1);
-        soapMessage.push(s2);
-        soapMessage.push(s3);
-        soapMessage.push(s4);
-        soapMessage.push(s5);
-        soapMessage.push(s6);
-        soapMessage.push(s7);
-
-        soapMessage.push(s8);
-        soapMessage.push(s9);
-        soapMessage.push(s10);
-
-        soapMessage.push(s11);
-        soapMessage.push(s12);
-        soapMessage.push(s13);
-        soapMessage.push(s14);
-        soapMessage.push(s15);
-        soapMessage.push(s16);
-        soapMessage.push(s17);
-
-        for (var i = 0; i < soapMessage.length; i++) {
-            $.ajax({
-                url: 'http://demo.oildigital.com:8080/gds/witsmlservice.asmx',
-                type: 'POST',
-                dataType: 'xml',
-                data: soapMessage[i],
-
-                complete: function (xmlHttpRequest, status) {
-                    //var json = getJson(xmlHttpRequest.responseText, "GetLogDataResponse");
-                    alert("commplete:" + xmlHttpRequest.responseText);
-                    // Module.soap_callback(callId, JSON.stringify(json), xmlHttpRequest.status);
-                },
-                contentType: 'text/xml; charset="utf-8"; action="http://www.oildigital.com/GetLogData"'
-
-            });
-        }
+            //});
+        
        
 
     });
