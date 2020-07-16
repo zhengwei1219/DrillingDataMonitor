@@ -322,6 +322,7 @@
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\DataMonitor_Canvas.js" />
+    <Content Include="Scripts\xml2json.js" />
     <Content Include="test.html" />
     <Content Include="ViewsScripts\DataMonitor\HLBDCurve.js" />
     <Content Include="ViewsScripts\DataMonitor\SNBXCurve.js" />
