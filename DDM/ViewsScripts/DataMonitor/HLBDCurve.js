@@ -111,21 +111,136 @@ HLBDCurveObj.prototype = {
                 height: 600,
                 fromCenter: false,
                 mousemove: function (layer) {
+                    var objX = { opacity: 1, x: 100, y: layer.eventY };
+                    var objY = { opacity: 1, x: layer.eventX, y: 0 };
+                    if (layer.name === "深\n度") {
+                        objX.opacity = 0;
+                        objY.opacity = 0;
+                    }
                     //让area_line直线跟随鼠标
-                    $(this).animateLayer('area_line', {
-                        opacity: 1,
-                        x: layer.x, y: layer.eventY
-                    }, 0)
-                }
-            });
+                    $(this).animateLayer('area_line_x', objX, 0);
+                    $(this).animateLayer('area_line_y', objY, 0);
+                    //$(this).drawRect({
+                    //    strokeStyle: '#000',
+                    //    strokeWidth: 2,
+                    //    layer: true,
+                    //    name: name,
+                    //    draggable: false,
+                    //    x: layer.x * 1.2, y: layer.eventY * 0.8,
+                    //    width: layer.width*0.5,
+                    //    height: 50,
+                    //    fromCenter: false,
+                    //})
+                },
+                mouseout: function (layer) { }
+            })
+            ;
+            if (name != "深\n度" && name != "荧\n光\n级\n别")
+            {
+                this.dataCanvas.drawRect({
+                    strokeStyle: 'red',
+                    strokeWidth: 2,
+                    layer: true,
+                    name: 'pointRect_' + i,
+                    draggable: false,
+                    opacity: 0,
+                    x: rectX, y: 100,
+                    width: arr[i].width * 0.8,
+                    height: 50,
+                    fromCenter: false,
+                }).drawText({
+                    fillStyle: 'blue',
+                    x: 100, y: 175,
+                    name: 'pointText_' + i,
+                    fontSize: 18,
+                    opacity: 0,
+                    layer: true,
+                    text: "111",
+                    fontFamily: '宋体',
+                    restrictDragToAxis: 'x'
+                });
+            }
+            
             this.drawLines(this.dataCanvas, name, "Y", 10);
             this.drawLines(this.dataCanvas, name, "X", 6);
             this.drawLines(this.dataCanvas, name, "Depth", 6);
-            this.drawLines(this.dataCanvas, name, "Area", 2);
-            this.drawDataLines(this.dataCanvas,name);
+           // this.drawLines(this.dataCanvas, name, "Area", 2);
+            this.drawDataLines(this.dataCanvas, name);
 
 
         }
+        this.dataCanvas.drawLine({
+            strokeStyle: 'black',
+            strokeWidth: 1,
+            rounded: true,
+            layer: true,
+            name:"area_line_x",
+            x1: 0, y1: 0,
+            x2: rectX + 50, y2: 0,
+            mousemove: function (layer) {
+                var objX = { opacity: 1, x: 100, y: layer.eventY };
+                var objY = { opacity: 1, x: layer.eventX, y: 0 };
+                if (layer.name === "深\n度") {
+                    objX.opacity = 0;
+                    objY.opacity = 0;
+                }
+                //让area_line直线跟随鼠标
+                $(this).animateLayer('area_line_x', objX, 0);
+                $(this).animateLayer('area_line_y', objY, 0);
+
+
+
+                var pointRectX = 105;
+                for (var j = 0; j < arr.length; j++) {
+                    if (j != 0) {
+                        pointRectX += arr[j - 1].width;
+                    } else {
+                        pointRectX = 105;
+                    }
+                    $(this).animateLayer('pointRect_' + j, { opacity: 1, x: pointRectX, y: layer.eventY }, 0);
+                    var text = "值：" + (pointRectX - 100) + " \n " + "MD:" + layer.eventY.toFixed(2);
+                    $(this).animateLayer('pointText_' + j, { opacity: 1, text: text, x: pointRectX + 40, y: layer.eventY + 20 }, 0);
+                }
+
+            }
+        });
+        this.dataCanvas.drawLine({
+            strokeStyle: 'black',
+            strokeWidth: 1,
+            rounded: true,
+            layer: true,
+            name: "area_line_y",
+            x1: 0, y1: 0,
+            x2: 0, y2: 600,
+            mousemove: function (layer) {
+                var objX = { opacity: 1, x: 100, y: layer.eventY };
+                var objY = { opacity: 1, x: layer.eventX, y: 0 };
+                if (layer.name === "深\n度") {
+                    objX.opacity = 0;
+                    objY.opacity = 0;
+                }
+                //让area_line直线跟随鼠标
+                $(this).animateLayer('area_line_x', objX, 0);
+                $(this).animateLayer('area_line_y', objY, 0);
+
+
+
+                var pointRectX = 105;
+                for (var j = 0; j < arr.length; j++)
+                {
+                    if (j != 0) {
+                        pointRectX += arr[j - 1].width;
+                    } else {
+                        pointRectX = 105;
+                    }
+                    $(this).animateLayer('pointRect_' + j, { opacity: 1, x: pointRectX, y: layer.eventY }, 0);
+                    var text = "值：" + (pointRectX - 100) + " \n " + "MD:" + layer.eventY.toFixed(2);
+                    $(this).animateLayer('pointText_' + j, { opacity: 1, text: text, x: pointRectX+40, y: layer.eventY+20 }, 0);
+                }
+                
+            }
+
+        });
     },
     getData:function(name)
     {
@@ -144,7 +259,7 @@ HLBDCurveObj.prototype = {
                var one = new Array();
                
                for (var i = 0; i < y.length; i++) {
-                   one.push([x[i],y[i]*rate]);
+                   one.push([x[i]*3,(y[i]-1936)*10]);
                }
                 //var one = [
                 //                   [50, 0],
@@ -315,18 +430,18 @@ HLBDCurveObj.prototype = {
                         layer: true,
                         x: layer.x + 25, y: layer.y + (oneitemheight * i),
                         fontSize: 12,
-                        text: (oneitemheight * i)*5,
+                        text: 1936 + i*10,
                         fontFamily: '宋体'
                     });
                     break;
-                case "Area":
-                    pts.push([0, 0.5]);
-                    pts.push([layer.width, 0.5]);
-                    lineObj.strokeStyle = 'red';
-                    lineObj.opacity = 0;
-                    lineObj.name = 'area_line';
+                //case "Area":
+                //    pts.push([0, 0.5]);
+                //    pts.push([layer.width, 0.5]);
+                //    lineObj.strokeStyle = 'red';
+                //    lineObj.opacity = 0;
+                //    lineObj.name = 'area_line';
               
-                    break;
+                //    break;
             }
             for (var p = 0; p < pts.length; p += 1) {
                 lineObj['x' + (p + 1)] = pts[p][0];
