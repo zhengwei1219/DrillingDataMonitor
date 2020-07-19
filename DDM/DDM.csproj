@@ -324,9 +324,10 @@
     <Content Include="Scripts\DataMonitor_Canvas.js" />
     <Content Include="Scripts\xml2json.js" />
     <Content Include="test.html" />
+    <Content Include="ViewsScripts\DataMonitor\BaseCurve.js" />
     <Content Include="ViewsScripts\DataMonitor\HLBDCurve.js" />
     <Content Include="ViewsScripts\DataMonitor\SNBXCurve.js" />
-    <Content Include="ViewsScripts\globalCurve.js" />
+    <Content Include="ViewsScripts\DataMonitor\globalCurve.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

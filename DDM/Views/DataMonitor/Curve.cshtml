@@ -3,9 +3,10 @@
 }
 <link href="@Url.Content("~/Content/themes/base/jquery-ui.css")" rel="stylesheet" />
 <link href="@Url.Content("~/Content/themes/base/jquery.ui.dialog.css")" rel="stylesheet" />
-<script src="@Url.Content("~/ViewsScripts/globalCurve.js")"></script>
+<script src="@Url.Content("~/ViewsScripts/DataMonitor/BaseCurve.js")?v=3"></script>
+<script src="@Url.Content("~/ViewsScripts/DataMonitor/globalCurve.js")"></script>
 <script src="@Url.Content("~/ViewsScripts/DataMonitor/HLBDCurve.js")?=3"></script>
-<script src="@Url.Content("~/ViewsScripts/DataMonitor/SNBXCurve.js")?=3"></script>
+<script src="@Url.Content("~/ViewsScripts/DataMonitor/SNBXCurve.js")?=4"></script>
 <script src="@Url.Content("~/Scripts/jquery-1.7.1.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.js")"></script>
 <script src="@Url.Content("~/Scripts/jcanvas.min.js")?v=8"></script>
@@ -65,7 +66,7 @@
 </style>
 <script type="text/javascript">
     $(function () {
-        
+
         new CurveContext().buildRect();
      
             //$.ajax({
@@ -87,6 +88,28 @@
        
 
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     function getJson(dom, tag) {
         alert(dom);
         var node = $(dom).find(tag).get(0);
@@ -106,10 +129,29 @@
     //var d = document.getElementById("can_datas");
     //var dxt = d.getContext("2d");
     //dxt.clearRect(0, 0, d.width, d.height);
+    //cxt.save();
+    //dxt.save();
+        //$('#can_header').clearCanvas(0, 0, $('#can_header').width, $('#can_header').height);
+        //$('#can_datas').clearCanvas(0, 0, $('#can_datas').width, $('#can_datas').height);
 
-        $('#can_header').clearCanvas();
-        $('#can_datas').clearCanvas();
+        $('#can_header').drawRect({
+            fillStyle: '#ffffff',
+            layer: true,
+            x: 0, y: 0,
+            width: this.width,
+            height: this.height,
+            fromCenter: false
+        });
+        $('#can_datas').drawRect({
+            fillStyle: '#ffffff',
+            layer: true,
+            x: 0, y: 0,
+            width: this.width,
+            height: this.height,
+            fromCenter: false
+        });
         new CurveContext().buildRect();
+       
 
     }
     function changeDepth() {
@@ -160,38 +202,33 @@
     </select>
     <input type="button" id="save" onclick="save();" value="保存" />
 </div>
-<div  style="width:100%;overflow:auto;height:400px;">
-
-<canvas id="can_header">
-
-    </canvas>
-    </div>
-<div  style="width:100%;overflow:auto;height:700px;">
-<canvas id="can_datas">
-
-    </canvas>
-    </div>
-<div id="contextmenu">
-    <ul>
-
-        <li>
-            道操作
-            <ul>
-               <li> <a href="#" onclick="alert(添加道);">添加道</a></li>
-                <li>删除本道</li>
-            </ul>
-        </li>
-        <li>
-            二号菜单
-            <ul>
-                <li>改变网页背景颜色</li>
-                <li>函数传参</li>
-            </ul>
-        </li>
-    </ul>
+<div style="width:100%;overflow:auto;height:400px;">
+    <canvas id="can_header"></canvas>
 </div>
-<div id="depth" style="display:none">
-    <label>设计深度</label>
-</div>
+    <div style="width:100%;overflow:auto;height:700px;">
+        <canvas id="can_datas"></canvas>
+    </div>
+    <div id="contextmenu">
+        <ul>
+
+            <li>
+                道操作
+                <ul>
+                    <li> <a href="#" onclick="alert(添加道);">添加道</a></li>
+                    <li>删除本道</li>
+                </ul>
+            </li>
+            <li>
+                二号菜单
+                <ul>
+                    <li>改变网页背景颜色</li>
+                    <li>函数传参</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div id="depth" style="display:none">
+        <label>设计深度</label>
+    </div>
 
 

@@ -20,10 +20,6 @@ function CurveContext()
     var rate = $("#rate option:selected").val();
     var head = $('#can_header');
     var data = $('#can_datas');
-    var config = {
-        company: company,
-        rate: rate
-    };
     this.curve = null;
     switch (company)
     {
@@ -45,8 +41,6 @@ CurveContext.prototype = {
         this.curve.buildRect();
     }
 }
-
-
 
 
 
