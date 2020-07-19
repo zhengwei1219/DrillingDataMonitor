@@ -26,15 +26,15 @@ HLBDCurveObj.prototype.drawHeadFram=function () {
     //var canheight = 400;
     this.headCanvas.attr("width", this.config.canvasHeadWidth);
     this.headCanvas.attr("height", this.config.canvasHeadHeight);
-    this.headCanvas.drawLine({
-        fillStyle: '#ffffff',
-        layer: true,
-        x1: 0, y1: 0,
-        x2: this.config.canvasHeadWidth, y2: 0,
-        x3: this.config.canvasHeadWidth, y3: this.config.canvasHeadHeight,
-        x4: 0, y4: this.config.canvasHeadHeight,
-        closed: true
-    });
+    //this.headCanvas.drawLine({
+    //    fillStyle: '#ffffff',
+    //    layer: true,
+    //    x1: 0, y1: 0,
+    //    x2: this.config.canvasHeadWidth, y2: 0,
+    //    x3: this.config.canvasHeadWidth, y3: this.config.canvasHeadHeight,
+    //    x4: 0, y4: this.config.canvasHeadHeight,
+    //    closed: true
+    //});
     var headLineStr = '{"电阻率": [{"strokeStyle": "red","name": "FTC","unit": "(m/hr)","startMark": "150","endMark": "0"}],"钻压/钻速/垂深": [{"strokeStyle": "black","name": "FTC","unit": "(m/hr)","startMark": "150","endMark": "0"},{"strokeStyle": "red","name": "FTC","unit": "(m/hr)","startMark": "150","endMark": "0"}]}';
     var headLineObj = $.parseJSON(headLineStr);
 
@@ -204,7 +204,7 @@ HLBDCurveObj.prototype.drawDataFram=function()
             strokeWidth: 2,
             layer: true,
             name: name,
-            draggable: false,
+           // draggable: false,
             x: rectX, y: 0,
             width: arr[i].width,
             height: this.config.canvasDataHeight,
@@ -239,7 +239,7 @@ HLBDCurveObj.prototype.drawDataFram=function()
                 strokeWidth: 2,
                 layer: true,
                 name: 'pointRect_' + i,
-                draggable: false,
+                //draggable: false,
                 opacity: 0,
                 x: rectX, y: 100,
                 width: arr[i].width * 0.8,
@@ -254,7 +254,7 @@ HLBDCurveObj.prototype.drawDataFram=function()
                 layer: true,
                 text: "111",
                 fontFamily: '宋体',
-                restrictDragToAxis: 'x'
+                //restrictDragToAxis: 'x'
             });
         }
 
@@ -434,11 +434,12 @@ HLBDCurveObj.prototype.drawDataLines=function () {
         for (var k = 0; k < lineArr.length; k++) {
             var obj = {
                 strokeStyle: lineArr[k].strokeStyle,
-                layer: true,
-                strokeWidth:1
+               layer: true,
+               strokeWidth: 1,
+                Zindex:99999999
                 //rounded: true
             };
-            
+          
             for (var p = 0; p < lineArr[k].points.length; p += 1) {
                 obj['x' + (p + 1)] = parseFloat(layer.x) + parseFloat(lineArr[k].points[p][0]);
                 obj['y' + (p + 1)] = lineArr[k].points[p][1];
@@ -448,7 +449,12 @@ HLBDCurveObj.prototype.drawDataLines=function () {
                 }
               
             }
-            
+            if (maxPoint > HLBD.config.canvasDataHeight) {
+                HLBD.clearDataFram();
+                HLBD.config.canvasDataHeight = maxPoint + 100;
+
+                HLBD.drawDataFram();
+            }
             HLBD.dataCanvas.drawLine(obj);
             
 
@@ -457,12 +463,7 @@ HLBDCurveObj.prototype.drawDataLines=function () {
         
         
     }
-    if (maxPoint > HLBD.config.canvasDataHeight) {
-        HLBD.clearDataFram();
-        HLBD.config.canvasDataHeight = maxPoint + 100;
-
-        HLBD.drawDataFram();
-    }
+   
         
 }
 
